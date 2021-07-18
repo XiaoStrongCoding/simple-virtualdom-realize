@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type='text/javascript' src='./element.js'></script>
+    <script type='text/javascript' src='./util.js'></script>
+    <script type='text/javascript' src='./patch.js'></script>
+    <script type='text/javascript' src='./listdiff.js'></script>
+    <script type='text/javascript' src='./diff.js'></script>
+</head>
+<body>
+    <div id='root'></div>
+    <script type='text/javascript'>
+        const root = document.getElementById('root')
+        let tree = new Element('div',{id: 'container'},[
+            new Element('p',{style: 'color: red', key: 'R'},['R simple virtual dom']),
+            new Element('p',{style: 'color: blue', key: 'B'},['B simple virtual dom']),
+            new Element('p',{style: 'color: yellow', key: 'Y'},['Y simple virtual dom']),
+            new Element('p',{style: 'color: green', key: 'G'},['G simple virtual dom']),
+            new Element('p',{style: 'color: black', key: 'D'},['D simple virtual dom']),
+            new Element('p',{style: 'color: pink', key: 'P'},['P simple virtual dom']),
+        ])
+        const content = tree.render()
+        root.appendChild(content)
+
+        setTimeout(function(){
+            // ignore: true
+            let newTree = new Element('div',{id: 'container'},[
+                new Element('p',{style: 'color: blue', key: 'B'},['B simple virtual dom']),
+                new Element('p',{style: 'color: red', key: 'R'},['R simple virtual dom']),
+                new Element('p',{style: 'color: yellow', key: 'Y'},['Y simple virtual dom']),
+                new Element('p',{style: 'color: pink', key: 'P'},['P simple virtual dom']),
+                new Element('p',{style: 'color: black', key: 'D'},['D simple virtual dom']),
+                new Element('p',{style: 'color: purple', key: 'PP'},['PP simple virtual dom']),
+            ])
+            const patches = diff(tree, newTree)
+            console.log(patches)
+            patch(content, patches)
+            tree = newTree
+        }, 2000)
+    </script>
+</body>
+</html>
